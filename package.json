@@ -12,7 +12,6 @@
   "keywords": [],
   "license": "ISC",
   "devDependencies": {
-    "nodemon": "^2.0.16",
     "@babel/preset-typescript": "^7.22.5",
     "@types/node": "^22.5.4",
     "@typescript-eslint/eslint-plugin": "^7.13.1",
@@ -20,11 +19,12 @@
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-prettier": "^4.2.1",
+    "nodemon": "^2.0.16",
     "prettier": "^2.8.8",
     "ts-loader": "^9.4.3",
     "typescript": "^5.5.2"
   },
   "dependencies": {
-    "ws": "^8.8.0"
+    "ws": "^8.18.0"
   }
 }
