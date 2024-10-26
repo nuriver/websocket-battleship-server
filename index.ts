@@ -18,10 +18,11 @@ httpServer.on('upgrade', (request, socket, head) => {
 
 wss.on('connection', (ws) => {
   console.log('New WebSocket client connected');
+  const clientId = Date.now()
 
   ws.on('message', (clientMessage) => {
     const message: Message = JSON.parse(clientMessage.toString());
-    socketRequestHandler(message, ws);
+    socketRequestHandler(message, ws, clientId);
   });
 });
 

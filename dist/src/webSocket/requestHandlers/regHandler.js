@@ -8,15 +8,26 @@ const players_1 = require("../../service/players");
 const sendResponse_1 = __importDefault(require("../../utils/sendResponse"));
 const winners_1 = require("../../service/winners");
 const rooms_1 = require("../../service/rooms");
-const regHandler = (message, ws) => {
+const regHandler = (message, ws, clientId) => {
     const data = JSON.parse(message.data);
-    const index = (0, players_1.addPlayer)(data);
+    const player = {
+        name: data.name,
+        index: clientId,
+        password: data.password
+    };
+    const players = (0, players_1.getPlayers)();
+    const playerExist = players.some((player) => {
+        return player.name === data.name;
+    });
+    console.log(playerExist);
     const loginRes = {
         name: data.name,
-        index: index + 1,
-        error: false,
-        errorText: '',
+        index: clientId,
+        error: playerExist ? true : false,
+        errorText: playerExist ? `Player with name ${data.name} already logged in` : ''
     };
+    (0, players_1.addPlayer)(player);
+    (console.log((0, players_1.getPlayers)()));
     const regRes = {
         id: 0,
         data: JSON.stringify(loginRes),

@@ -16,9 +16,10 @@ index_1.httpServer.on('upgrade', (request, socket, head) => {
 });
 wss.on('connection', (ws) => {
     console.log('New WebSocket client connected');
+    const clientId = Date.now();
     ws.on('message', (clientMessage) => {
         const message = JSON.parse(clientMessage.toString());
-        (0, webSocket_1.default)(message, ws);
+        (0, webSocket_1.default)(message, ws, clientId);
     });
 });
 console.log(`Start static http server on the ${HTTP_PORT} port!`);

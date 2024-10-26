@@ -7,3 +7,13 @@ export const addPlayer = (credentials: Player) => {
   const playerIndex = players.indexOf(credentials);
   return playerIndex;
 };
+
+export const getPlayers = () => {
+  return players;
+};
+
+export const getPlayer = (id: number) => {
+  const player = players.find((player) => player.index === id);
+
+  return player;
+};
