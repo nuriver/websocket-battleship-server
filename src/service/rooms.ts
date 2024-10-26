@@ -1,6 +1,8 @@
 import { Room } from '../types/dataTypes';
+import sendResponse from '../utils/sendResponse';
+import { getPlayer } from './players';
 
-const rooms: Room[] = [];
+let rooms: Room[] = [];
 
 export const addRoom = (room: Room) => {
   rooms.push(room);
@@ -20,4 +22,18 @@ export const userHasRoom = (id: number) => {
   } else {
     return false;
   }
+};
+
+export const addUserToRoom = (roomIndex: number, userId: number) => {
+  const targetRoom = rooms.find((room) => room.roomId === roomIndex);
+  const user = getPlayer(userId);
+  if (targetRoom && user) {
+    targetRoom?.roomUsers.push(user);
+    deleteRoom(roomIndex);
+    deleteRoom(userId);
+  }
+};
+
+export const deleteRoom = (roomIndex: number) => {
+  rooms = rooms.filter((room) => room.roomId !== roomIndex);
 };

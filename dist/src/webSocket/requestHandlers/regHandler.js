@@ -7,27 +7,27 @@ const types_1 = require("../../types/types");
 const players_1 = require("../../service/players");
 const sendResponse_1 = __importDefault(require("../../utils/sendResponse"));
 const winners_1 = require("../../service/winners");
-const rooms_1 = require("../../service/rooms");
+const roomsUpdateNotifier_1 = __importDefault(require("../../utils/roomsUpdateNotifier"));
 const regHandler = (message, ws, clientId) => {
     const data = JSON.parse(message.data);
     const player = {
         name: data.name,
         index: clientId,
-        password: data.password
+        password: data.password,
     };
     const players = (0, players_1.getPlayers)();
     const playerExist = players.some((player) => {
         return player.name === data.name;
     });
-    console.log(playerExist);
     const loginRes = {
         name: data.name,
         index: clientId,
         error: playerExist ? true : false,
-        errorText: playerExist ? `Player with name ${data.name} already logged in` : ''
+        errorText: playerExist
+            ? `Player with name ${data.name} already logged in`
+            : '',
     };
     (0, players_1.addPlayer)(player);
-    (console.log((0, players_1.getPlayers)()));
     const regRes = {
         id: 0,
         data: JSON.stringify(loginRes),
@@ -41,13 +41,7 @@ const regHandler = (message, ws, clientId) => {
         data: JSON.stringify(winners),
     };
     (0, sendResponse_1.default)(updateWinnersRes, ws);
-    const rooms = (0, rooms_1.getRooms)();
-    const updateRoomRes = {
-        type: types_1.ResMessage.UPDATE_ROOM,
-        id: 0,
-        data: JSON.stringify(rooms),
-    };
-    (0, sendResponse_1.default)(updateRoomRes, ws);
+    (0, roomsUpdateNotifier_1.default)();
 };
 exports.default = regHandler;
 //# sourceMappingURL=regHandler.js.map

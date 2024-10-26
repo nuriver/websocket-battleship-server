@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const types_1 = require("../types/types");
 const reqLog_1 = __importDefault(require("../utils/reqLog"));
+const addUserToRoomHandler_1 = __importDefault(require("./requestHandlers/addUserToRoomHandler"));
 const createRoomHandler_ts_1 = __importDefault(require("./requestHandlers/createRoomHandler.ts"));
 const regHandler_1 = __importDefault(require("./requestHandlers/regHandler"));
 const socketRequestHandler = (message, ws, clientId) => {
@@ -18,6 +19,7 @@ const socketRequestHandler = (message, ws, clientId) => {
     }
     if (message.type === types_1.ReqMessage.ADD_USER_TO_ROOM) {
         (0, reqLog_1.default)(message.type);
+        (0, addUserToRoomHandler_1.default)(message, clientId, ws);
     }
 };
 exports.default = socketRequestHandler;

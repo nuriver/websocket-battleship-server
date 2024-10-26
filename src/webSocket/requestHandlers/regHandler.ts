@@ -1,10 +1,10 @@
 import { LoginRes } from '../../types/dataTypes';
 import WebSocket from 'ws';
 import { Message, ResMessage } from '../../types/types';
-import { addPlayer, getPlayer, getPlayers } from '../../service/players';
+import { addPlayer, getPlayers } from '../../service/players';
 import sendResponse from '../../utils/sendResponse';
 import { getWinners } from '../../service/winners';
-import { getRooms } from '../../service/rooms';
+import roomsUpdateNotifier from '../../utils/roomsUpdateNotifier';
 
 const regHandler = (message: Message, ws: WebSocket, clientId: number) => {
   const data = JSON.parse(message.data as string);
@@ -47,14 +47,7 @@ const regHandler = (message: Message, ws: WebSocket, clientId: number) => {
 
   sendResponse(updateWinnersRes, ws);
 
-  const rooms = getRooms();
-  const updateRoomRes = {
-    type: ResMessage.UPDATE_ROOM,
-    id: 0,
-    data: JSON.stringify(rooms),
-  };
-
-  sendResponse(updateRoomRes, ws);
+  roomsUpdateNotifier();
 };
 
 export default regHandler;

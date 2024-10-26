@@ -1,5 +1,6 @@
 import { Message, ReqMessage } from '../types/types';
 import reqLog from '../utils/reqLog';
+import addUserToRoomHandler from './requestHandlers/addUserToRoomHandler';
 import createRoomHandler from './requestHandlers/createRoomHandler.ts';
 import regHandler from './requestHandlers/regHandler';
 import WebSocket from 'ws';
@@ -21,6 +22,7 @@ const socketRequestHandler = (
 
   if (message.type === ReqMessage.ADD_USER_TO_ROOM) {
     reqLog(message.type);
+    addUserToRoomHandler(message, clientId, ws);
   }
 };
 

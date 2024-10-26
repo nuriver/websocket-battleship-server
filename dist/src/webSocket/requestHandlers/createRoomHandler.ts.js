@@ -5,8 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const rooms_1 = require("../../service/rooms");
 const players_1 = require("../../service/players");
-const types_1 = require("../../types/types");
-const sendResponse_1 = __importDefault(require("../../utils/sendResponse"));
+const roomsUpdateNotifier_1 = __importDefault(require("../../utils/roomsUpdateNotifier"));
 const createRoomHandler = (ws, id) => {
     if ((0, rooms_1.userHasRoom)(id) === true) {
         return;
@@ -15,17 +14,10 @@ const createRoomHandler = (ws, id) => {
     const rooms = (0, rooms_1.getRooms)();
     const room = {
         roomId: id,
-        roomUsers: user ? [user] : []
+        roomUsers: user ? [user] : [],
     };
     (0, rooms_1.addRoom)(room);
-    const updatedRooms = (0, rooms_1.getRooms)();
-    console.log(rooms, id);
-    const updateRoomRes = {
-        id: 0,
-        data: JSON.stringify(updatedRooms),
-        type: types_1.ResMessage.UPDATE_ROOM
-    };
-    (0, sendResponse_1.default)(updateRoomRes, ws);
+    (0, roomsUpdateNotifier_1.default)();
 };
 exports.default = createRoomHandler;
 //# sourceMappingURL=createRoomHandler.ts.js.map
