@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getClient = exports.deleteClient = exports.addClient = void 0;
+exports.getClient = exports.getClients = exports.deleteClient = exports.addClient = void 0;
 const players_1 = require("./players");
 const clients = new Map();
 const addClient = (clientId, ws) => {
@@ -12,6 +12,10 @@ const deleteClient = (clientId) => {
     (0, players_1.deletePlayer)(clientId);
 };
 exports.deleteClient = deleteClient;
+const getClients = () => {
+    return clients;
+};
+exports.getClients = getClients;
 const getClient = (clientId) => {
     const ws = clients.get(clientId);
     return ws;

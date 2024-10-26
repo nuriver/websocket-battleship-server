@@ -10,7 +10,6 @@ const createRoomHandler = (ws: WebSocket, id: number) => {
   }
 
   const user = getPlayer(id);
-  const rooms = getRooms();
   const room: Room = {
     roomId: id,
     roomUsers: user ? [user] : [],

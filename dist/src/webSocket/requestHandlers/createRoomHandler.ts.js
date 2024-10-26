@@ -11,7 +11,6 @@ const createRoomHandler = (ws, id) => {
         return;
     }
     const user = (0, players_1.getPlayer)(id);
-    const rooms = (0, rooms_1.getRooms)();
     const room = {
         roomId: id,
         roomUsers: user ? [user] : [],

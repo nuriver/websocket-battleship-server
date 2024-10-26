@@ -12,6 +12,10 @@ export const deleteClient = (clientId: number) => {
   deletePlayer(clientId);
 };
 
+export const getClients = () => {
+  return clients;
+};
+
 export const getClient = (clientId: number) => {
   const ws = clients.get(clientId);
   return ws;
