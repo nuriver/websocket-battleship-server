@@ -1,13 +1,14 @@
-import { LoginReq } from '../types/dataTypes';
 import { Message, ReqMessage } from '../types/types';
+import reqLog from '../utils/reqLog';
 import regHandler from './requestHandlers/regHandler';
 import WebSocket from 'ws';
 
 const socketRequestHandler = (message: Message, ws: WebSocket) => {
-  const data = JSON.parse(message.data);
+  console.log(message);
 
   if (message.type === ReqMessage.REG) {
-    regHandler(data, ws);
+    reqLog(message.type);
+    regHandler(message, ws);
   }
 };
 

@@ -1,8 +1,3 @@
-export type LoginReq = {
-  name: string;
-  password: string;
-};
-
 export type LoginRes = {
   name: string;
   index: number | string;
@@ -10,7 +5,7 @@ export type LoginRes = {
   errorText: string;
 };
 
-export type UpdateWinnerRes = {
+export type Winner = {
   name: string;
   wins: number;
 };
@@ -26,7 +21,8 @@ export type CreateGameRes = {
 
 export type Player = {
   name: string;
-  index: number | string;
+  password?: string;
+  index?: number | string;
 };
 
 export type Room = {
@@ -82,9 +78,9 @@ export type FinishRes = {
 };
 
 export type ParsedData =
-  | LoginReq
+  | Player
   | LoginRes
-  | UpdateWinnerRes
+  | Winner
   | Game
   | AddUserToRoomReq
   | CreateGameRes

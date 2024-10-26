@@ -1,0 +1,1 @@
+{"version":3,"file":"players.js","sourceRoot":"","sources":["../../../src/service/players.ts"],"names":[],"mappings":";;;AAEA,MAAM,OAAO,GAAa,EAAE,CAAC;AAEtB,MAAM,SAAS,GAAG,CAAC,WAAmB,EAAE,EAAE;IAC/C,OAAO,CAAC,IAAI,CAAC,WAAW,CAAC,CAAC;IAC1B,MAAM,WAAW,GAAG,OAAO,CAAC,OAAO,CAAC,WAAW,CAAC,CAAC;IACjD,OAAO,WAAW,CAAC;AACrB,CAAC,CAAC;AAJW,QAAA,SAAS,aAIpB"}

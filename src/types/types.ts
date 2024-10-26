@@ -1,3 +1,5 @@
+import { ParsedData } from './dataTypes';
+
 export enum ReqMessage {
   REG = 'reg',
   CREATE_ROOM = 'create_room',
@@ -20,5 +22,6 @@ export enum ResMessage {
 
 export interface Message {
   type: string;
-  data: string;
+  data?: string;
+  id: number;
 }

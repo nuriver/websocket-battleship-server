@@ -1,9 +1,13 @@
-import { addPlayer } from '../../service/DB';
-import { LoginReq, LoginRes } from '../../types/dataTypes';
+import { LoginRes } from '../../types/dataTypes';
 import WebSocket from 'ws';
-import { ResMessage } from '../../types/types';
+import { Message, ResMessage } from '../../types/types';
+import { addPlayer } from '../../service/players';
+import sendResponse from '../../utils/sendResponse';
+import { getWinners } from '../../service/winners';
+import { getRooms } from '../../service/rooms';
 
-const regHandler = (data: LoginReq, ws: WebSocket) => {
+const regHandler = (message: Message, ws: WebSocket) => {
+  const data = JSON.parse(message.data as string);
   const index = addPlayer(data);
 
   const loginRes: LoginRes = {
@@ -12,14 +16,31 @@ const regHandler = (data: LoginReq, ws: WebSocket) => {
     error: false,
     errorText: '',
   };
-
-  const regResponse = JSON.stringify({
+  const regRes = {
     id: 0,
     data: JSON.stringify(loginRes),
     type: ResMessage.REG,
-  });
+  };
 
-  ws.send(regResponse);
+  sendResponse(regRes, ws);
+
+  const winners = getWinners();
+  const updateWinnersRes = {
+    type: ResMessage.UPDATE_WINNERS,
+    id: 0,
+    data: JSON.stringify(winners),
+  };
+
+  sendResponse(updateWinnersRes, ws);
+
+  const rooms = getRooms();
+  const updateRoomRes = {
+    type: ResMessage.UPDATE_ROOM,
+    id: 0,
+    data: JSON.stringify(rooms),
+  };
+
+  sendResponse(updateRoomRes, ws);
 };
 
 export default regHandler;
