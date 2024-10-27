@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const games_1 = require("../../service/games");
 const ships_1 = require("../../service/ships");
 const types_1 = require("../../types/types");
+const generateRandomPosition_1 = __importDefault(require("../../utils/generateRandomPosition"));
 const makeAttack_1 = __importDefault(require("../../utils/makeAttack"));
 const sendResponse_1 = require("../../utils/sendResponse");
 const attackHandler = (message) => {
@@ -15,10 +16,16 @@ const attackHandler = (message) => {
         return;
     }
     const enemy = (0, games_1.getGameEnemy)(data.gameId, data.indexPlayer);
-    const position = {
-        x: data.x,
-        y: data.y,
-    };
+    let position;
+    if (message.type === types_1.ReqMessage.RANDOM_ATTACK) {
+        position = (0, generateRandomPosition_1.default)(enemy?.checkedCells);
+    }
+    else {
+        position = {
+            x: data.x,
+            y: data.y,
+        };
+    }
     const checked = (0, ships_1.isChecked)(position, enemy?.checkedCells);
     if (checked) {
         return;
@@ -30,12 +37,9 @@ const attackHandler = (message) => {
     };
     if (enemy) {
         enemy.checkedCells.push(position);
-        const { result, surroundingCells } = (0, makeAttack_1.default)(data.x, data.y, enemy.shipField);
+        const { result, surroundingCells } = (0, makeAttack_1.default)(position.x, position.y, enemy.shipField);
         const attackData = {
-            position: {
-                x: data.x,
-                y: data.y,
-            },
+            position,
             currentPlayer: data.indexPlayer,
             status: result,
         };
@@ -51,7 +55,6 @@ const attackHandler = (message) => {
         }
         if (result === 'killed') {
             nextTurn = data.indexPlayer;
-            ;
             surroundingCells?.forEach((cell) => {
                 enemy.checkedCells.push(cell);
                 const killedAttackSurroundData = {

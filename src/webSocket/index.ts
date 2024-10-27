@@ -32,7 +32,10 @@ const socketRequestHandler = (
     addShipsHandler(message);
   }
 
-  if (message.type === ReqMessage.ATTACK) {
+  if (
+    message.type === ReqMessage.ATTACK ||
+    message.type === ReqMessage.RANDOM_ATTACK
+  ) {
     reqLog(message.type);
     attackHandler(message);
   }

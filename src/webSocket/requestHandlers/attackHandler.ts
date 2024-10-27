@@ -1,7 +1,8 @@
 import { getGame, getGameEnemy } from '../../service/games';
 import { isChecked } from '../../service/ships';
-import { AttackReq, TurnRes } from '../../types/dataTypes';
-import { Message, ResMessage } from '../../types/types';
+import { AttackReq, Position, TurnRes } from '../../types/dataTypes';
+import { Message, ReqMessage, ResMessage } from '../../types/types';
+import generateRandomPosition from '../../utils/generateRandomPosition';
 import makeAttack from '../../utils/makeAttack';
 import { sendResponseToChosen } from '../../utils/sendResponse';
 
@@ -14,10 +15,18 @@ const attackHandler = (message: Message) => {
   }
 
   const enemy = getGameEnemy(data.gameId, data.indexPlayer);
-  const position = {
-    x: data.x,
-    y: data.y,
-  };
+
+  let position: Position;
+
+  if (message.type === ReqMessage.RANDOM_ATTACK) {
+    position = generateRandomPosition(enemy?.checkedCells);
+  } else {
+    position = {
+      x: data.x,
+      y: data.y,
+    };
+  }
+
   const checked = isChecked(position, enemy?.checkedCells);
 
   if (checked) {
@@ -33,15 +42,12 @@ const attackHandler = (message: Message) => {
   if (enemy) {
     enemy.checkedCells.push(position);
     const { result, surroundingCells } = makeAttack(
-      data.x,
-      data.y,
+      position.x,
+      position.y,
       enemy.shipField
     );
     const attackData = {
-      position: {
-        x: data.x,
-        y: data.y,
-      },
+      position,
       currentPlayer: data.indexPlayer,
       status: result,
     };

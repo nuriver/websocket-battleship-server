@@ -27,7 +27,7 @@ const socketRequestHandler = (message, ws, clientId) => {
         (0, reqLog_1.default)(message.type);
         (0, addShipsHandler_1.default)(message);
     }
-    if (message.type === types_1.ReqMessage.ATTACK) {
+    if (message.type === types_1.ReqMessage.ATTACK || message.type === types_1.ReqMessage.RANDOM_ATTACK) {
         (0, reqLog_1.default)(message.type);
         (0, attackHandler_1.default)(message);
     }
