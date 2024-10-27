@@ -40,5 +40,15 @@ export const gameCanStart = (gameId: number) => {
 
 export const getGamePlayers = (gameId: number) => {
   const game = getGame(gameId);
-  const gamePlayers = [];
+  const gamePlayers = game?.playersData;
+  return gamePlayers;
+};
+
+export const getGamePlayer = (gameId: number, gamePlayerId: number) => {
+  const game = getGame(gameId);
+  const gamePlayers = getGamePlayers(gameId);
+  const gamePlayer = gamePlayers?.find(
+    (player) => player.indexPlayer === gamePlayerId
+  );
+  return gamePlayer;
 };

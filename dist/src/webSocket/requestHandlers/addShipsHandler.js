@@ -25,11 +25,13 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const clients_1 = require("../../service/clients");
 const games_1 = require("../../service/games");
+const ships_1 = require("../../service/ships");
 const types_1 = require("../../types/types");
 const sendResponse_1 = __importStar(require("../../utils/sendResponse"));
 const addShipsHandler = (message) => {
     const data = JSON.parse(message.data);
     (0, games_1.addPlayerToGame)(data);
+    (0, ships_1.createShipField)(data);
     if ((0, games_1.gameCanStart)(data.gameId)) {
         const game = (0, games_1.getGame)(data.gameId);
         const playerData1 = game?.playersData[0];

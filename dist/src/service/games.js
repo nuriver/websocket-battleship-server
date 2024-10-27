@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getGamePlayers = exports.gameCanStart = exports.addPlayerToGame = exports.getGame = exports.createGame = void 0;
+exports.getGamePlayer = exports.getGamePlayers = exports.gameCanStart = exports.addPlayerToGame = exports.getGame = exports.createGame = void 0;
 let games = [];
 const addGame = (game) => {
     games.push(game);
@@ -36,7 +36,15 @@ const gameCanStart = (gameId) => {
 exports.gameCanStart = gameCanStart;
 const getGamePlayers = (gameId) => {
     const game = (0, exports.getGame)(gameId);
-    const gamePlayers = [];
+    const gamePlayers = game?.playersData;
+    return gamePlayers;
 };
 exports.getGamePlayers = getGamePlayers;
+const getGamePlayer = (gameId, gamePlayerId) => {
+    const game = (0, exports.getGame)(gameId);
+    const gamePlayers = (0, exports.getGamePlayers)(gameId);
+    const gamePlayer = gamePlayers?.find((player) => player.indexPlayer === gamePlayerId);
+    return gamePlayer;
+};
+exports.getGamePlayer = getGamePlayer;
 //# sourceMappingURL=games.js.map
