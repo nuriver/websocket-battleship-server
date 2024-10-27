@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getGamePlayer = exports.getGamePlayers = exports.gameCanStart = exports.addPlayerToGame = exports.getGame = exports.createGame = void 0;
+exports.getGameEnemy = exports.getGamePlayer = exports.getGamePlayers = exports.gameCanStart = exports.addPlayerToGame = exports.getGame = exports.createGame = void 0;
 let games = [];
 const addGame = (game) => {
     games.push(game);
@@ -21,7 +21,11 @@ exports.getGame = getGame;
 const addPlayerToGame = (playerGameData) => {
     const targetGame = (0, exports.getGame)(playerGameData.gameId);
     if (targetGame) {
-        targetGame.playersData.push(playerGameData);
+        const gamePlayer = {
+            ...playerGameData,
+            checkedCells: [],
+        };
+        targetGame.playersData.push(gamePlayer);
     }
 };
 exports.addPlayerToGame = addPlayerToGame;
@@ -41,10 +45,15 @@ const getGamePlayers = (gameId) => {
 };
 exports.getGamePlayers = getGamePlayers;
 const getGamePlayer = (gameId, gamePlayerId) => {
-    const game = (0, exports.getGame)(gameId);
     const gamePlayers = (0, exports.getGamePlayers)(gameId);
     const gamePlayer = gamePlayers?.find((player) => player.indexPlayer === gamePlayerId);
     return gamePlayer;
 };
 exports.getGamePlayer = getGamePlayer;
+const getGameEnemy = (gameId, gamePlayerId) => {
+    const gamePlayers = (0, exports.getGamePlayers)(gameId);
+    const gameEnemy = gamePlayers?.find((player) => player.indexPlayer !== gamePlayerId);
+    return gameEnemy;
+};
+exports.getGameEnemy = getGameEnemy;
 //# sourceMappingURL=games.js.map

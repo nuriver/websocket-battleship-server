@@ -1,20 +1,22 @@
 import { getClient } from '../../service/clients';
 import { addPlayerToGame, gameCanStart, getGame } from '../../service/games';
 import { createShipField } from '../../service/ships';
-import { PlayerGameData } from '../../types/dataTypes';
+import { Game } from '../../types/dataTypes';
 import { Message, ResMessage } from '../../types/types';
 import sendResponse, { sendResponseToChosen } from '../../utils/sendResponse';
 
 const addShipsHandler = (message: Message) => {
-  const data: PlayerGameData = JSON.parse(message.data as string);
+  const data = JSON.parse(message.data as string);
 
   addPlayerToGame(data);
   createShipField(data);
 
   if (gameCanStart(data.gameId)) {
-    const game = getGame(data.gameId);
+    const game = getGame(data.gameId) as Game;
+
     const playerData1 = game?.playersData[0];
     const playerData2 = game?.playersData[1];
+    game.currentTurn = playerData1?.indexPlayer;
 
     const starGameResForPlayer1 = {
       type: ResMessage.START_GAME,

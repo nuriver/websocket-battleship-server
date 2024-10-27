@@ -45,15 +45,16 @@ export type Ship = {
 export type PlayerGameData = {
   gameId: number;
   ships: Ship[];
-  indexPlayer: number | string;
+  indexPlayer: number;
   shipField: ShipField;
+  checkedCells: Position[];
 };
 
 export type AttackReq = {
-  gameId: number | string;
+  gameId: number;
   x: number;
   y: number;
-  indexPlayer: number | string;
+  indexPlayer: number;
 };
 
 export type AttackRes = {
@@ -95,6 +96,7 @@ export type ParsedData =
 export type Game = {
   id: number;
   playersData: PlayerGameData[];
+  currentTurn?: number;
 };
 
 export type ShipFieldCell = string | null;
@@ -103,4 +105,10 @@ export type ShipTracker = { [id: string]: number };
 export type ShipField = {
   field: ShipFieldCell[][];
   shipTracker: ShipTracker;
+  shipPositions: shipPositions;
+};
+
+export type Position = { x: number; y: number };
+export type shipPositions = {
+  [key: string]: Position[];
 };

@@ -7,6 +7,7 @@ const types_1 = require("../types/types");
 const reqLog_1 = __importDefault(require("../utils/reqLog"));
 const addShipsHandler_1 = __importDefault(require("./requestHandlers/addShipsHandler"));
 const addUserToRoomHandler_1 = __importDefault(require("./requestHandlers/addUserToRoomHandler"));
+const attackHandler_1 = __importDefault(require("./requestHandlers/attackHandler"));
 const createRoomHandler_ts_1 = __importDefault(require("./requestHandlers/createRoomHandler.ts"));
 const regHandler_1 = __importDefault(require("./requestHandlers/regHandler"));
 const socketRequestHandler = (message, ws, clientId) => {
@@ -28,6 +29,7 @@ const socketRequestHandler = (message, ws, clientId) => {
     }
     if (message.type === types_1.ReqMessage.ATTACK) {
         (0, reqLog_1.default)(message.type);
+        (0, attackHandler_1.default)(message);
     }
 };
 exports.default = socketRequestHandler;

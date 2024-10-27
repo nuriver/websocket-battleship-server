@@ -23,7 +23,11 @@ export const getGame = (gameId: number) => {
 export const addPlayerToGame = (playerGameData: PlayerGameData) => {
   const targetGame = getGame(playerGameData.gameId as number);
   if (targetGame) {
-    targetGame.playersData.push(playerGameData);
+    const gamePlayer = {
+      ...playerGameData,
+      checkedCells: [],
+    };
+    targetGame.playersData.push(gamePlayer);
   }
 };
 
@@ -45,10 +49,17 @@ export const getGamePlayers = (gameId: number) => {
 };
 
 export const getGamePlayer = (gameId: number, gamePlayerId: number) => {
-  const game = getGame(gameId);
   const gamePlayers = getGamePlayers(gameId);
   const gamePlayer = gamePlayers?.find(
     (player) => player.indexPlayer === gamePlayerId
   );
   return gamePlayer;
+};
+
+export const getGameEnemy = (gameId: number, gamePlayerId: number) => {
+  const gamePlayers = getGamePlayers(gameId);
+  const gameEnemy = gamePlayers?.find(
+    (player) => player.indexPlayer !== gamePlayerId
+  );
+  return gameEnemy;
 };

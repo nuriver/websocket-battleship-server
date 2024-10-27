@@ -36,6 +36,7 @@ const addShipsHandler = (message) => {
         const game = (0, games_1.getGame)(data.gameId);
         const playerData1 = game?.playersData[0];
         const playerData2 = game?.playersData[1];
+        game.currentTurn = playerData1?.indexPlayer;
         const starGameResForPlayer1 = {
             type: types_1.ResMessage.START_GAME,
             data: JSON.stringify({

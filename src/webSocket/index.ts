@@ -2,6 +2,7 @@ import { Message, ReqMessage } from '../types/types';
 import reqLog from '../utils/reqLog';
 import addShipsHandler from './requestHandlers/addShipsHandler';
 import addUserToRoomHandler from './requestHandlers/addUserToRoomHandler';
+import attackHandler from './requestHandlers/attackHandler';
 import createRoomHandler from './requestHandlers/createRoomHandler.ts';
 import regHandler from './requestHandlers/regHandler';
 import WebSocket from 'ws';
@@ -33,6 +34,7 @@ const socketRequestHandler = (
 
   if (message.type === ReqMessage.ATTACK) {
     reqLog(message.type);
+    attackHandler(message);
   }
 };
 

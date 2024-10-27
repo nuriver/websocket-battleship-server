@@ -15,7 +15,7 @@ export enum ResMessage {
   CREATE_GAME = 'create_game',
   UPDATE_ROOM = 'update_room',
   START_GAME = 'start_game',
-  ATTACK_FEEDBACK = 'attack_feedback',
+  ATTACK = 'attack',
   TURN = 'turn',
   FINISH = 'finish',
 }

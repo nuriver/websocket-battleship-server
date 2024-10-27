@@ -17,7 +17,7 @@ var ResMessage;
     ResMessage["CREATE_GAME"] = "create_game";
     ResMessage["UPDATE_ROOM"] = "update_room";
     ResMessage["START_GAME"] = "start_game";
-    ResMessage["ATTACK_FEEDBACK"] = "attack_feedback";
+    ResMessage["ATTACK"] = "attack";
     ResMessage["TURN"] = "turn";
     ResMessage["FINISH"] = "finish";
 })(ResMessage || (exports.ResMessage = ResMessage = {}));
