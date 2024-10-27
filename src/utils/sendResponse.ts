@@ -2,6 +2,7 @@ import { wss } from '../..';
 import { getClients } from '../service/clients';
 import { Message } from '../types/types';
 import WebSocket from 'ws';
+import getValuesFromMap from './getValuesFromMap';
 
 const sendResponse = (message: Message, ws: WebSocket) => {
   ws.send(JSON.stringify(message));

@@ -8,11 +8,12 @@ const rooms_1 = require("../../service/rooms");
 const sendResponse_1 = __importDefault(require("../../utils/sendResponse"));
 const roomsUpdateNotifier_1 = __importDefault(require("../../utils/roomsUpdateNotifier"));
 const clients_1 = require("../../service/clients");
+const games_1 = require("../../service/games");
 const addUserToRoomHandler = (message, clientId, ws) => {
     const data = JSON.parse(message.data);
     const roomId = data.indexRoom;
     if (clientId === roomId) {
-        console.log("Result: User is already in the room");
+        console.log('Result: User is already in the room');
         return;
     }
     (0, rooms_1.addUserToRoom)(roomId, clientId);
@@ -24,16 +25,17 @@ const addUserToRoomHandler = (message, clientId, ws) => {
         type: types_1.ResMessage.CREATE_GAME,
         data: JSON.stringify({
             idPlayer: clientId,
-            idGame: gameId
-        })
+            idGame: gameId,
+        }),
     };
     const enemyCreateGameRes = {
         ...playerCreateGameRes,
         data: JSON.stringify({
             idPlayer: roomId,
-            idGame: gameId
-        })
+            idGame: gameId,
+        }),
     };
+    (0, games_1.createGame)(gameId);
     (0, sendResponse_1.default)(playerCreateGameRes, wsPlayer);
     (0, sendResponse_1.default)(enemyCreateGameRes, wsEnemy);
     (0, roomsUpdateNotifier_1.default)();

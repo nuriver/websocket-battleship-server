@@ -1,5 +1,6 @@
 import { Message, ReqMessage } from '../types/types';
 import reqLog from '../utils/reqLog';
+import addShipsHandler from './requestHandlers/addShipsHandler';
 import addUserToRoomHandler from './requestHandlers/addUserToRoomHandler';
 import createRoomHandler from './requestHandlers/createRoomHandler.ts';
 import regHandler from './requestHandlers/regHandler';
@@ -23,6 +24,15 @@ const socketRequestHandler = (
   if (message.type === ReqMessage.ADD_USER_TO_ROOM) {
     reqLog(message.type);
     addUserToRoomHandler(message, clientId, ws);
+  }
+
+  if (message.type === ReqMessage.ADD_SHIPS) {
+    reqLog(message.type);
+    addShipsHandler(message);
+  }
+
+  if (message.type === ReqMessage.ATTACK) {
+    reqLog(message.type);
   }
 };
 

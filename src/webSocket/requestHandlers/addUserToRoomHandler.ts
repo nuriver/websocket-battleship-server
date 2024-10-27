@@ -4,6 +4,7 @@ import { addUserToRoom, getRooms } from '../../service/rooms';
 import sendResponse, { sendResponseToAll } from '../../utils/sendResponse';
 import roomsUpdateNotifier from '../../utils/roomsUpdateNotifier';
 import { getClient } from '../../service/clients';
+import { createGame } from '../../service/games';
 
 const addUserToRoomHandler = (
   message: Message,
@@ -37,6 +38,8 @@ const addUserToRoomHandler = (
       idGame: gameId,
     }),
   };
+
+  createGame(gameId);
   sendResponse(playerCreateGameRes, wsPlayer);
   sendResponse(enemyCreateGameRes, wsEnemy);
   roomsUpdateNotifier();

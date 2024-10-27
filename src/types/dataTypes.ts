@@ -32,7 +32,7 @@ export type Room = {
 
 export type UpdateRoomRes = Room[];
 
-export type AddShipsReq = {
+export type Ship = {
   position: {
     x: number;
     y: number;
@@ -42,9 +42,9 @@ export type AddShipsReq = {
   type: 'small' | 'medium' | 'large' | 'huge';
 };
 
-export type Game = {
-  gameId: number | string;
-  ships: AddShipsReq[];
+export type PlayerGameData = {
+  gameId: number;
+  ships: Ship[];
   indexPlayer: number | string;
 };
 
@@ -81,7 +81,7 @@ export type ParsedData =
   | Player
   | LoginRes
   | Winner
-  | Game
+  | PlayerGameData
   | AddUserToRoomReq
   | CreateGameRes
   | UpdateRoomRes
@@ -90,3 +90,8 @@ export type ParsedData =
   | RandomAttackReq
   | TurnRes
   | FinishRes;
+
+export type Game = {
+  id: number;
+  playersData: PlayerGameData[];
+};
