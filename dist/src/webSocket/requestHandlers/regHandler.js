@@ -22,7 +22,7 @@ const regHandler = (message, ws, clientId) => {
         const player = (0, players_1.getPlayerByName)(data.name);
         if (player.status === 'online') {
             errorObject.error = true;
-            errorObject.errorText = `Player with name ${data.name} already logged in`;
+            errorObject.errorText = `User with name ${data.name} already logged in`;
         }
         if (player.status === 'offline') {
             const isValidPassword = player.password === data.password;

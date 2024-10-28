@@ -39,3 +39,14 @@ httpServer.listen(HTTP_PORT, () => {
   console.log(`Server is running at ${url}`);
   openBrowser(url);
 });
+
+const closeWebSocketServer = () => {
+  wss.clients.forEach((client) => client.close());
+  wss.close(() => {
+    console.log('WebSocket server closed');
+    process.exit(0); 
+  });
+};
+
+process.on('SIGINT', closeWebSocketServer);
+process.on('SIGTERM', closeWebSocketServer);

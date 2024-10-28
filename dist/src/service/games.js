@@ -118,7 +118,7 @@ const finishGame = (winnerId, enemyId, gameId, gameAborted) => {
     };
     if (gameAborted) {
         const whoCancelled = (0, players_1.getPlayer)(enemyId);
-        console.log(`Game was canceled by ${whoCancelled?.name}`);
+        console.log(`Game was cancelled by ${whoCancelled?.name}`);
         (0, sendResponse_1.default)(finishRes, winnerSocket);
     }
     else {

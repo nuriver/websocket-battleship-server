@@ -34,4 +34,13 @@ index_1.httpServer.listen(HTTP_PORT, () => {
     console.log(`Server is running at ${url}`);
     (0, index_1.openBrowser)(url);
 });
+const closeWebSocketServer = () => {
+    exports.wss.clients.forEach((client) => client.close());
+    exports.wss.close(() => {
+        console.log('WebSocket server closed');
+        process.exit(0);
+    });
+};
+process.on('SIGINT', closeWebSocketServer);
+process.on('SIGTERM', closeWebSocketServer);
 //# sourceMappingURL=index.js.map
