@@ -15,7 +15,7 @@ const addUserToRoomHandler = (message, clientId) => {
     const data = JSON.parse(message.data);
     const roomId = data.indexRoom;
     if (clientId === roomId) {
-        console.log('Result: User is already in the room');
+        (0, resLog_1.default)('User is already in the room');
         return;
     }
     (0, rooms_1.addUserToRoom)(roomId, clientId);

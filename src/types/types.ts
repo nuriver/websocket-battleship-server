@@ -1,5 +1,3 @@
-import { ParsedData } from './dataTypes';
-
 export enum ReqMessage {
   REG = 'reg',
   CREATE_ROOM = 'create_room',
