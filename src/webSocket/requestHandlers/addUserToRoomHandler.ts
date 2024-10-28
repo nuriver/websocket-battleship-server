@@ -1,21 +1,18 @@
-import WebSocket from 'ws';
 import { Message, ResMessage } from '../../types/types';
-import { addUserToRoom, getRooms } from '../../service/rooms';
-import sendResponse, { sendResponseToAll } from '../../utils/sendResponse';
+import { addUserToRoom } from '../../service/rooms';
+import sendResponse from '../../utils/sendResponse';
 import roomsUpdateNotifier from '../../utils/roomsUpdateNotifier';
 import { getClient } from '../../service/clients';
 import { createGame } from '../../service/games';
+import resLog from '../../utils/resLog';
+import { getPlayer } from '../../service/players';
 
-const addUserToRoomHandler = (
-  message: Message,
-  clientId: number,
-  ws: WebSocket
-) => {
+const addUserToRoomHandler = (message: Message, clientId: number) => {
   const data = JSON.parse(message.data as string);
   const roomId = data.indexRoom;
 
   if (clientId === roomId) {
-    console.log('Result: User is already in the room');
+    resLog('User is already in the room');
     return;
   }
 
@@ -39,10 +36,16 @@ const addUserToRoomHandler = (
     }),
   };
 
+  const player = getPlayer(clientId);
+  const enemy = getPlayer(roomId);
+
+  resLog(`User ${player?.name} was added to the room to ${enemy?.name}`);
+  roomsUpdateNotifier();
+
   createGame(gameId);
   sendResponse(playerCreateGameRes, wsPlayer);
   sendResponse(enemyCreateGameRes, wsEnemy);
-  roomsUpdateNotifier();
+  resLog(ResMessage.CREATE_GAME);
 };
 
 export default addUserToRoomHandler;

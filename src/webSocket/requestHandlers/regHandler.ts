@@ -5,6 +5,7 @@ import { addPlayer, getPlayers } from '../../service/players';
 import sendResponse from '../../utils/sendResponse';
 import { getWinners } from '../../service/winners';
 import roomsUpdateNotifier from '../../utils/roomsUpdateNotifier';
+import resLog from '../../utils/resLog';
 
 const regHandler = (message: Message, ws: WebSocket, clientId: number) => {
   const data = JSON.parse(message.data as string);
@@ -19,7 +20,7 @@ const regHandler = (message: Message, ws: WebSocket, clientId: number) => {
     return player.name === data.name;
   });
 
-  const loginRes: LoginRes = {
+  const regResData: LoginRes = {
     name: data.name,
     index: clientId,
     error: playerExist ? true : false,
@@ -28,26 +29,33 @@ const regHandler = (message: Message, ws: WebSocket, clientId: number) => {
       : '',
   };
 
-  addPlayer(player);
-
   const regRes = {
     id: 0,
-    data: JSON.stringify(loginRes),
+    data: JSON.stringify(regResData),
     type: ResMessage.REG,
   };
 
   sendResponse(regRes, ws);
 
-  const winners = getWinners();
-  const updateWinnersRes = {
-    type: ResMessage.UPDATE_WINNERS,
-    id: 0,
-    data: JSON.stringify(winners),
-  };
+  if (!playerExist) {
+    addPlayer(player);
+    resLog(`User ${player.name} is logged in`);
 
-  sendResponse(updateWinnersRes, ws);
+    const winners = getWinners();
+    const updateWinnersRes = {
+      type: ResMessage.UPDATE_WINNERS,
+      id: 0,
+      data: JSON.stringify(winners),
+    };
 
-  roomsUpdateNotifier();
+    resLog(ResMessage.UPDATE_WINNERS);
+    sendResponse(updateWinnersRes, ws);
+
+    resLog(ResMessage.UPDATE_ROOM);
+    roomsUpdateNotifier();
+  } else {
+    resLog(`User with name ${data.name} is already logged in`);
+  }
 };
 
 export default regHandler;

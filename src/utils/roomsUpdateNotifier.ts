@@ -1,5 +1,5 @@
 import { getRooms } from '../service/rooms';
-import { Message, ResMessage } from '../types/types';
+import { ResMessage } from '../types/types';
 import { sendResponseToAll } from './sendResponse';
 
 const roomsUpdateNotifier = () => {

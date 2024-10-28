@@ -9,7 +9,9 @@ const sendResponse_1 = __importDefault(require("../../utils/sendResponse"));
 const roomsUpdateNotifier_1 = __importDefault(require("../../utils/roomsUpdateNotifier"));
 const clients_1 = require("../../service/clients");
 const games_1 = require("../../service/games");
-const addUserToRoomHandler = (message, clientId, ws) => {
+const resLog_1 = __importDefault(require("../../utils/resLog"));
+const players_1 = require("../../service/players");
+const addUserToRoomHandler = (message, clientId) => {
     const data = JSON.parse(message.data);
     const roomId = data.indexRoom;
     if (clientId === roomId) {
@@ -35,10 +37,14 @@ const addUserToRoomHandler = (message, clientId, ws) => {
             idGame: gameId,
         }),
     };
+    const player = (0, players_1.getPlayer)(clientId);
+    const enemy = (0, players_1.getPlayer)(roomId);
+    (0, resLog_1.default)(`User ${player?.name} was added to the room to ${enemy?.name}`);
+    (0, roomsUpdateNotifier_1.default)();
     (0, games_1.createGame)(gameId);
     (0, sendResponse_1.default)(playerCreateGameRes, wsPlayer);
     (0, sendResponse_1.default)(enemyCreateGameRes, wsEnemy);
-    (0, roomsUpdateNotifier_1.default)();
+    (0, resLog_1.default)(types_1.ResMessage.CREATE_GAME);
 };
 exports.default = addUserToRoomHandler;
 //# sourceMappingURL=addUserToRoomHandler.js.map

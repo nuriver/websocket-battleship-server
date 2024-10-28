@@ -4,11 +4,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const games_1 = require("../../service/games");
+const players_1 = require("../../service/players");
 const ships_1 = require("../../service/ships");
 const winners_1 = require("../../service/winners");
 const types_1 = require("../../types/types");
 const generateRandomPosition_1 = __importDefault(require("../../utils/generateRandomPosition"));
 const makeAttack_1 = __importDefault(require("../../utils/makeAttack"));
+const reqLog_1 = __importDefault(require("../../utils/reqLog"));
+const resLog_1 = __importDefault(require("../../utils/resLog"));
 const sendResponse_1 = require("../../utils/sendResponse");
 const attackHandler = (message) => {
     const data = JSON.parse(message.data);
@@ -16,6 +19,7 @@ const attackHandler = (message) => {
     if (game?.currentTurn !== data.indexPlayer) {
         return;
     }
+    (0, reqLog_1.default)(message.type);
     const enemy = (0, games_1.getGameEnemy)(data.gameId, data.indexPlayer);
     let position;
     if (message.type === types_1.ReqMessage.RANDOM_ATTACK) {
@@ -80,11 +84,18 @@ const attackHandler = (message) => {
                 currentPlayer: nextTurn,
             }),
         };
+        (0, resLog_1.default)(result);
+        if (result === 'killed' && !finish) {
+            (0, resLog_1.default)('All cells around the destroyed ship have been marked as misses');
+        }
         (0, sendResponse_1.sendResponseToChosen)(attackResMessage, [
             data.indexPlayer,
             enemy.indexPlayer,
         ]);
+        const nextPlayer = (0, players_1.getPlayer)(nextTurn);
+        const currentPlayer = (0, players_1.getPlayer)(data.indexPlayer);
         if (!finish) {
+            (0, resLog_1.default)(`Next turn is ${nextPlayer?.name}`);
             (0, sendResponse_1.sendResponseToChosen)(turnRes, [data.indexPlayer, enemy.indexPlayer]);
             game.currentTurn = nextTurn;
         }
@@ -104,11 +115,11 @@ const attackHandler = (message) => {
                 id: 0,
                 data: JSON.stringify(winners),
             };
+            (0, resLog_1.default)('Game is finished');
+            (0, resLog_1.default)(`${currentPlayer?.name} is the winner!`);
+            (0, resLog_1.default)(types_1.ResMessage.UPDATE_WINNERS);
             (0, sendResponse_1.sendResponseToChosen)(finishRes, [data.indexPlayer, enemy.indexPlayer]);
-            (0, sendResponse_1.sendResponseToChosen)(updateWinnersRes, [
-                data.indexPlayer,
-                enemy.indexPlayer,
-            ]);
+            (0, sendResponse_1.sendResponseToAll)(updateWinnersRes);
             return;
         }
     }

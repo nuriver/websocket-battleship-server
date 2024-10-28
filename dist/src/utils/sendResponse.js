@@ -10,14 +10,12 @@ const ws_1 = __importDefault(require("ws"));
 const getValuesFromMap_1 = __importDefault(require("./getValuesFromMap"));
 const sendResponse = (message, ws) => {
     ws.send(JSON.stringify(message));
-    console.log(`Result: ${message.type}`);
 };
 exports.default = sendResponse;
 const sendResponseToAll = (message) => {
     __1.wss.clients.forEach((client) => {
         if (client.readyState === ws_1.default.OPEN) {
             client.send(JSON.stringify(message));
-            console.log(`Result: ${message.type}`);
         }
     });
 };
@@ -28,7 +26,6 @@ const sendResponseToChosen = (message, clientIds) => {
     sockets.forEach((socket) => {
         if (socket.readyState === ws_1.default.OPEN) {
             socket.send(JSON.stringify(message));
-            console.log(`Result: ${message.type}`);
         }
     });
 };

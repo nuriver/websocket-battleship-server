@@ -17,7 +17,7 @@ index_1.httpServer.on('upgrade', (request, socket, head) => {
     });
 });
 exports.wss.on('connection', (ws) => {
-    console.log('New WebSocket client connected');
+    console.log(`New WebSocket client connected on the ${HTTP_PORT} port at ${url}`);
     const clientId = Date.now();
     (0, clients_1.addClient)(clientId, ws);
     ws.on('message', (clientMessage) => {

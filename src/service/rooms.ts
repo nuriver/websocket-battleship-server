@@ -1,5 +1,4 @@
 import { Room } from '../types/dataTypes';
-import sendResponse from '../utils/sendResponse';
 import { getPlayer } from './players';
 
 let rooms: Room[] = [];

@@ -17,11 +17,11 @@ const socketRequestHandler = (message, ws, clientId) => {
     }
     if (message.type === types_1.ReqMessage.CREATE_ROOM) {
         (0, reqLog_1.default)(message.type);
-        (0, createRoomHandler_ts_1.default)(ws, clientId);
+        (0, createRoomHandler_ts_1.default)(clientId);
     }
     if (message.type === types_1.ReqMessage.ADD_USER_TO_ROOM) {
         (0, reqLog_1.default)(message.type);
-        (0, addUserToRoomHandler_1.default)(message, clientId, ws);
+        (0, addUserToRoomHandler_1.default)(message, clientId);
     }
     if (message.type === types_1.ReqMessage.ADD_SHIPS) {
         (0, reqLog_1.default)(message.type);
@@ -29,7 +29,6 @@ const socketRequestHandler = (message, ws, clientId) => {
     }
     if (message.type === types_1.ReqMessage.ATTACK ||
         message.type === types_1.ReqMessage.RANDOM_ATTACK) {
-        (0, reqLog_1.default)(message.type);
         (0, attackHandler_1.default)(message);
     }
 };

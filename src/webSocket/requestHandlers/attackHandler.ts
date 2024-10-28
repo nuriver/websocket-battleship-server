@@ -1,11 +1,17 @@
 import { getGame, getGameEnemy } from '../../service/games';
+import { getPlayer } from '../../service/players';
 import { isChecked } from '../../service/ships';
 import { getWinners, updateWinner } from '../../service/winners';
-import { AttackReq, Position, TurnRes } from '../../types/dataTypes';
+import { AttackReq, Position } from '../../types/dataTypes';
 import { Message, ReqMessage, ResMessage } from '../../types/types';
 import generateRandomPosition from '../../utils/generateRandomPosition';
 import makeAttack from '../../utils/makeAttack';
-import { sendResponseToAll, sendResponseToChosen } from '../../utils/sendResponse';
+import reqLog from '../../utils/reqLog';
+import resLog from '../../utils/resLog';
+import {
+  sendResponseToAll,
+  sendResponseToChosen,
+} from '../../utils/sendResponse';
 
 const attackHandler = (message: Message) => {
   const data: AttackReq = JSON.parse(message.data as string);
@@ -14,6 +20,8 @@ const attackHandler = (message: Message) => {
   if (game?.currentTurn !== data.indexPlayer) {
     return;
   }
+
+  reqLog(message.type);
 
   const enemy = getGameEnemy(data.gameId, data.indexPlayer);
 
@@ -97,12 +105,21 @@ const attackHandler = (message: Message) => {
       }),
     };
 
+    resLog(result);
+    if (result === 'killed' && !finish) {
+      resLog('All cells around the destroyed ship have been marked as misses');
+    }
+
     sendResponseToChosen(attackResMessage, [
       data.indexPlayer,
       enemy.indexPlayer,
     ]);
 
+    const nextPlayer = getPlayer(nextTurn as number);
+    const currentPlayer = getPlayer(data.indexPlayer);
+
     if (!finish) {
+      resLog(`Next turn is ${nextPlayer?.name}`);
       sendResponseToChosen(turnRes, [data.indexPlayer, enemy.indexPlayer]);
       game.currentTurn = nextTurn;
     } else {
@@ -124,6 +141,9 @@ const attackHandler = (message: Message) => {
         data: JSON.stringify(winners),
       };
 
+      resLog('Game is finished');
+      resLog(`${currentPlayer?.name} is the winner!`);
+      resLog(ResMessage.UPDATE_WINNERS);
       sendResponseToChosen(finishRes, [data.indexPlayer, enemy.indexPlayer]);
       sendResponseToAll(updateWinnersRes);
       return;

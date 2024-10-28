@@ -4,8 +4,6 @@ import socketRequestHandler from './src/webSocket';
 import { Message } from './src/types/types';
 import { addClient, deleteClient } from './src/service/clients';
 
-//TODO change config for unused imports to true;
-
 const HTTP_PORT = 3000;
 const url = `http://localhost:${HTTP_PORT}`;
 
@@ -18,7 +16,7 @@ httpServer.on('upgrade', (request, socket, head) => {
 });
 
 wss.on('connection', (ws) => {
-  console.log('New WebSocket client connected');
+  console.log(`New WebSocket client connected on the ${HTTP_PORT} port at ${url}`);
   const clientId = Date.now();
   addClient(clientId, ws);
 
