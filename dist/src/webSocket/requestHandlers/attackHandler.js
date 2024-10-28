@@ -105,7 +105,10 @@ const attackHandler = (message) => {
                 data: JSON.stringify(winners),
             };
             (0, sendResponse_1.sendResponseToChosen)(finishRes, [data.indexPlayer, enemy.indexPlayer]);
-            (0, sendResponse_1.sendResponseToChosen)(updateWinnersRes, [data.indexPlayer, enemy.indexPlayer]);
+            (0, sendResponse_1.sendResponseToChosen)(updateWinnersRes, [
+                data.indexPlayer,
+                enemy.indexPlayer,
+            ]);
             return;
         }
     }

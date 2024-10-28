@@ -5,7 +5,7 @@ import { AttackReq, Position, TurnRes } from '../../types/dataTypes';
 import { Message, ReqMessage, ResMessage } from '../../types/types';
 import generateRandomPosition from '../../utils/generateRandomPosition';
 import makeAttack from '../../utils/makeAttack';
-import { sendResponseToChosen } from '../../utils/sendResponse';
+import { sendResponseToAll, sendResponseToChosen } from '../../utils/sendResponse';
 
 const attackHandler = (message: Message) => {
   const data: AttackReq = JSON.parse(message.data as string);
@@ -125,10 +125,7 @@ const attackHandler = (message: Message) => {
       };
 
       sendResponseToChosen(finishRes, [data.indexPlayer, enemy.indexPlayer]);
-      sendResponseToChosen(updateWinnersRes, [
-        data.indexPlayer,
-        enemy.indexPlayer,
-      ]);
+      sendResponseToAll(updateWinnersRes);
       return;
     }
   }
