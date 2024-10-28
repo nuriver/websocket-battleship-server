@@ -1,17 +1,13 @@
-import { getGame, getGameEnemy } from '../../service/games';
+import { finishGame, getGame, getGameEnemy } from '../../service/games';
 import { getPlayer } from '../../service/players';
 import { isChecked } from '../../service/ships';
-import { getWinners, updateWinner } from '../../service/winners';
 import { AttackReq, Position } from '../../types/dataTypes';
 import { Message, ReqMessage, ResMessage } from '../../types/types';
 import generateRandomPosition from '../../utils/generateRandomPosition';
 import makeAttack from '../../utils/makeAttack';
 import reqLog from '../../utils/reqLog';
 import resLog from '../../utils/resLog';
-import {
-  sendResponseToAll,
-  sendResponseToChosen,
-} from '../../utils/sendResponse';
+import { sendResponseToChosen } from '../../utils/sendResponse';
 
 const attackHandler = (message: Message) => {
   const data: AttackReq = JSON.parse(message.data as string);
@@ -116,36 +112,13 @@ const attackHandler = (message: Message) => {
     ]);
 
     const nextPlayer = getPlayer(nextTurn as number);
-    const currentPlayer = getPlayer(data.indexPlayer);
 
     if (!finish) {
       resLog(`Next turn is ${nextPlayer?.name}`);
       sendResponseToChosen(turnRes, [data.indexPlayer, enemy.indexPlayer]);
       game.currentTurn = nextTurn;
     } else {
-      const finishResData = {
-        winPlayer: data.indexPlayer,
-      };
-      const finishRes = {
-        type: ResMessage.FINISH,
-        id: 0,
-        data: JSON.stringify(finishResData),
-      };
-
-      updateWinner(data.indexPlayer);
-
-      const winners = getWinners();
-      const updateWinnersRes = {
-        type: ResMessage.UPDATE_WINNERS,
-        id: 0,
-        data: JSON.stringify(winners),
-      };
-
-      resLog('Game is finished');
-      resLog(`${currentPlayer?.name} is the winner!`);
-      resLog(ResMessage.UPDATE_WINNERS);
-      sendResponseToChosen(finishRes, [data.indexPlayer, enemy.indexPlayer]);
-      sendResponseToAll(updateWinnersRes);
+      finishGame(data.indexPlayer, enemy.indexPlayer, game.id, false);
       return;
     }
   }

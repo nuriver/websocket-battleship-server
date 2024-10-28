@@ -8,6 +8,7 @@ const index_1 = require("./src/http_server/index");
 const ws_1 = require("ws");
 const webSocket_1 = __importDefault(require("./src/webSocket"));
 const clients_1 = require("./src/service/clients");
+const onCloseHandler_1 = __importDefault(require("./src/utils/onCloseHandler"));
 const HTTP_PORT = 3000;
 const url = `http://localhost:${HTTP_PORT}`;
 exports.wss = new ws_1.WebSocketServer({ noServer: true });
@@ -25,7 +26,7 @@ exports.wss.on('connection', (ws) => {
         (0, webSocket_1.default)(message, ws, clientId);
     });
     ws.on('close', () => {
-        (0, clients_1.deleteClient)(clientId);
+        (0, onCloseHandler_1.default)(clientId);
     });
 });
 console.log(`Start static http server on the ${HTTP_PORT} port!`);

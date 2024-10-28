@@ -2,7 +2,8 @@ import { httpServer, openBrowser } from './src/http_server/index';
 import { WebSocketServer } from 'ws';
 import socketRequestHandler from './src/webSocket';
 import { Message } from './src/types/types';
-import { addClient, deleteClient } from './src/service/clients';
+import { addClient } from './src/service/clients';
+import onCloseHandler from './src/utils/onCloseHandler';
 
 const HTTP_PORT = 3000;
 const url = `http://localhost:${HTTP_PORT}`;
@@ -16,7 +17,9 @@ httpServer.on('upgrade', (request, socket, head) => {
 });
 
 wss.on('connection', (ws) => {
-  console.log(`New WebSocket client connected on the ${HTTP_PORT} port at ${url}`);
+  console.log(
+    `New WebSocket client connected on the ${HTTP_PORT} port at ${url}`
+  );
   const clientId = Date.now();
   addClient(clientId, ws);
 
@@ -26,7 +29,7 @@ wss.on('connection', (ws) => {
   });
 
   ws.on('close', () => {
-    deleteClient(clientId);
+    onCloseHandler(clientId);
   });
 });
 

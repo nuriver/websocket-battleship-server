@@ -6,7 +6,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const games_1 = require("../../service/games");
 const players_1 = require("../../service/players");
 const ships_1 = require("../../service/ships");
-const winners_1 = require("../../service/winners");
 const types_1 = require("../../types/types");
 const generateRandomPosition_1 = __importDefault(require("../../utils/generateRandomPosition"));
 const makeAttack_1 = __importDefault(require("../../utils/makeAttack"));
@@ -93,33 +92,13 @@ const attackHandler = (message) => {
             enemy.indexPlayer,
         ]);
         const nextPlayer = (0, players_1.getPlayer)(nextTurn);
-        const currentPlayer = (0, players_1.getPlayer)(data.indexPlayer);
         if (!finish) {
             (0, resLog_1.default)(`Next turn is ${nextPlayer?.name}`);
             (0, sendResponse_1.sendResponseToChosen)(turnRes, [data.indexPlayer, enemy.indexPlayer]);
             game.currentTurn = nextTurn;
         }
         else {
-            const finishResData = {
-                winPlayer: data.indexPlayer,
-            };
-            const finishRes = {
-                type: types_1.ResMessage.FINISH,
-                id: 0,
-                data: JSON.stringify(finishResData),
-            };
-            (0, winners_1.updateWinner)(data.indexPlayer);
-            const winners = (0, winners_1.getWinners)();
-            const updateWinnersRes = {
-                type: types_1.ResMessage.UPDATE_WINNERS,
-                id: 0,
-                data: JSON.stringify(winners),
-            };
-            (0, resLog_1.default)('Game is finished');
-            (0, resLog_1.default)(`${currentPlayer?.name} is the winner!`);
-            (0, resLog_1.default)(types_1.ResMessage.UPDATE_WINNERS);
-            (0, sendResponse_1.sendResponseToChosen)(finishRes, [data.indexPlayer, enemy.indexPlayer]);
-            (0, sendResponse_1.sendResponseToAll)(updateWinnersRes);
+            (0, games_1.finishGame)(data.indexPlayer, enemy.indexPlayer, game.id, false);
             return;
         }
     }
