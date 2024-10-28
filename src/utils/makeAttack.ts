@@ -1,4 +1,4 @@
-import { Position, ShipField, ShipFieldCell } from '../types/dataTypes';
+import { Position, ShipField } from '../types/dataTypes';
 
 const isWithinBounds = (x: number, y: number): boolean =>
   x >= 0 && x < 10 && y >= 0 && y < 10;
@@ -35,10 +35,11 @@ const makeAttack = (
   x: number,
   y: number,
   enemyShipField: ShipField
-): { result: string; surroundingCells?: Position[] } => {
+): { result: string; surroundingCells?: Position[]; finish: boolean } => {
   const field = enemyShipField.field;
   let result: string = 'miss';
   let surroundingCells: Position[] | undefined;
+  let finish: boolean = false;
 
   if (field[x]) {
     const cell = field[x]![y];
@@ -58,9 +59,17 @@ const makeAttack = (
         result = 'shot';
       }
     }
+
+    const allShipsDestroyed = Object.values(enemyShipField.shipTracker).every(
+      (value) => value === 0
+    );
+
+    if (allShipsDestroyed) {
+      finish = true;
+    }
   }
 
-  return { result, surroundingCells };
+  return { result, surroundingCells, finish };
 };
 
 export default makeAttack;

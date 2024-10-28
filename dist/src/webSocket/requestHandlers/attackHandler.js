@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const games_1 = require("../../service/games");
 const ships_1 = require("../../service/ships");
+const winners_1 = require("../../service/winners");
 const types_1 = require("../../types/types");
 const generateRandomPosition_1 = __importDefault(require("../../utils/generateRandomPosition"));
 const makeAttack_1 = __importDefault(require("../../utils/makeAttack"));
@@ -37,7 +38,7 @@ const attackHandler = (message) => {
     };
     if (enemy) {
         enemy.checkedCells.push(position);
-        const { result, surroundingCells } = (0, makeAttack_1.default)(position.x, position.y, enemy.shipField);
+        const { result, surroundingCells, finish } = (0, makeAttack_1.default)(position.x, position.y, enemy.shipField);
         const attackData = {
             position,
             currentPlayer: data.indexPlayer,
@@ -83,8 +84,30 @@ const attackHandler = (message) => {
             data.indexPlayer,
             enemy.indexPlayer,
         ]);
-        (0, sendResponse_1.sendResponseToChosen)(turnRes, [data.indexPlayer, enemy.indexPlayer]);
-        game.currentTurn = nextTurn;
+        if (!finish) {
+            (0, sendResponse_1.sendResponseToChosen)(turnRes, [data.indexPlayer, enemy.indexPlayer]);
+            game.currentTurn = nextTurn;
+        }
+        else {
+            const finishResData = {
+                winPlayer: data.indexPlayer,
+            };
+            const finishRes = {
+                type: types_1.ResMessage.FINISH,
+                id: 0,
+                data: JSON.stringify(finishResData),
+            };
+            (0, winners_1.updateWinner)(data.indexPlayer);
+            const winners = (0, winners_1.getWinners)();
+            const updateWinnersRes = {
+                type: types_1.ResMessage.UPDATE_WINNERS,
+                id: 0,
+                data: JSON.stringify(winners),
+            };
+            (0, sendResponse_1.sendResponseToChosen)(finishRes, [data.indexPlayer, enemy.indexPlayer]);
+            (0, sendResponse_1.sendResponseToChosen)(updateWinnersRes, [data.indexPlayer, enemy.indexPlayer]);
+            return;
+        }
     }
 };
 exports.default = attackHandler;

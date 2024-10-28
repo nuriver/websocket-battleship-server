@@ -26,6 +26,7 @@ const makeAttack = (x, y, enemyShipField) => {
     const field = enemyShipField.field;
     let result = 'miss';
     let surroundingCells;
+    let finish = false;
     if (field[x]) {
         const cell = field[x][y];
         if (cell === null) {
@@ -42,8 +43,12 @@ const makeAttack = (x, y, enemyShipField) => {
                 result = 'shot';
             }
         }
+        const allShipsDestroyed = Object.values(enemyShipField.shipTracker).every((value) => value === 0);
+        if (allShipsDestroyed) {
+            finish = true;
+        }
     }
-    return { result, surroundingCells };
+    return { result, surroundingCells, finish };
 };
 exports.default = makeAttack;
 //# sourceMappingURL=makeAttack.js.map

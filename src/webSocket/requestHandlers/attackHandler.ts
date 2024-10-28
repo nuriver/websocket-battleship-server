@@ -1,5 +1,6 @@
 import { getGame, getGameEnemy } from '../../service/games';
 import { isChecked } from '../../service/ships';
+import { getWinners, updateWinner } from '../../service/winners';
 import { AttackReq, Position, TurnRes } from '../../types/dataTypes';
 import { Message, ReqMessage, ResMessage } from '../../types/types';
 import generateRandomPosition from '../../utils/generateRandomPosition';
@@ -41,11 +42,12 @@ const attackHandler = (message: Message) => {
 
   if (enemy) {
     enemy.checkedCells.push(position);
-    const { result, surroundingCells } = makeAttack(
+    const { result, surroundingCells, finish } = makeAttack(
       position.x,
       position.y,
       enemy.shipField
     );
+
     const attackData = {
       position,
       currentPlayer: data.indexPlayer,
@@ -100,9 +102,35 @@ const attackHandler = (message: Message) => {
       enemy.indexPlayer,
     ]);
 
-    sendResponseToChosen(turnRes, [data.indexPlayer, enemy.indexPlayer]);
+    if (!finish) {
+      sendResponseToChosen(turnRes, [data.indexPlayer, enemy.indexPlayer]);
+      game.currentTurn = nextTurn;
+    } else {
+      const finishResData = {
+        winPlayer: data.indexPlayer,
+      };
+      const finishRes = {
+        type: ResMessage.FINISH,
+        id: 0,
+        data: JSON.stringify(finishResData),
+      };
 
-    game.currentTurn = nextTurn;
+      updateWinner(data.indexPlayer);
+
+      const winners = getWinners();
+      const updateWinnersRes = {
+        type: ResMessage.UPDATE_WINNERS,
+        id: 0,
+        data: JSON.stringify(winners),
+      };
+
+      sendResponseToChosen(finishRes, [data.indexPlayer, enemy.indexPlayer]);
+      sendResponseToChosen(updateWinnersRes, [
+        data.indexPlayer,
+        enemy.indexPlayer,
+      ]);
+      return;
+    }
   }
 };
 
