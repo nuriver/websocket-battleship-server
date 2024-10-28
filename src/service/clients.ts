@@ -1,5 +1,5 @@
 import WebSocket from 'ws';
-import { deletePlayer } from './players';
+import { setPlayerOffline } from './players';
 
 const clients = new Map();
 
@@ -9,7 +9,7 @@ export const addClient = (clientId: number, ws: WebSocket) => {
 
 export const deleteClient = (clientId: number) => {
   clients.delete(clientId);
-  deletePlayer(clientId);
+  setPlayerOffline(clientId);
 };
 
 export const getClients = () => {

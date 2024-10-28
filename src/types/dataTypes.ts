@@ -23,6 +23,7 @@ export type Player = {
   name: string;
   password?: string;
   index?: number | string;
+  status: 'offline' | 'online';
 };
 
 export type Room = {

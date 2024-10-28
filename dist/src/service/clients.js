@@ -9,7 +9,7 @@ const addClient = (clientId, ws) => {
 exports.addClient = addClient;
 const deleteClient = (clientId) => {
     clients.delete(clientId);
-    (0, players_1.deletePlayer)(clientId);
+    (0, players_1.setPlayerOffline)(clientId);
 };
 exports.deleteClient = deleteClient;
 const getClients = () => {
