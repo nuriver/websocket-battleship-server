@@ -23,8 +23,7 @@ const regHandler = (message: Message, ws: WebSocket, clientId: number) => {
 
     if (player.status === 'online') {
       errorObject.error = true;
-      errorObject.errorText = `Player with name ${data.name} already logged in`;
-      resLog(errorObject.errorText);
+      errorObject.errorText = `User with name ${data.name} already logged in`;
     }
 
     if (player.status === 'offline') {
@@ -33,7 +32,6 @@ const regHandler = (message: Message, ws: WebSocket, clientId: number) => {
       if (!isValidPassword) {
         errorObject.error = true;
         errorObject.errorText = `Invalid password for ${data.name}`;
-        resLog(errorObject.errorText);
       } else {
         player.status = 'online';
         player.index = clientId;
@@ -54,8 +52,10 @@ const regHandler = (message: Message, ws: WebSocket, clientId: number) => {
   };
 
   sendResponse(regRes, ws);
+
   if (errorObject.errorText) {
     resLog(errorObject.errorText);
+    return;
   }
 
   if (!playerExist) {
@@ -67,21 +67,22 @@ const regHandler = (message: Message, ws: WebSocket, clientId: number) => {
     };
 
     addPlayer(player);
-    resLog(`User ${player.name} is logged in`);
-
-    const winners = getWinners();
-    const updateWinnersRes = {
-      type: ResMessage.UPDATE_WINNERS,
-      id: 0,
-      data: JSON.stringify(winners),
-    };
-
-    resLog(ResMessage.UPDATE_WINNERS);
-    sendResponse(updateWinnersRes, ws);
-
-    resLog(ResMessage.UPDATE_ROOM);
-    roomsUpdateNotifier();
   }
+
+  resLog(`User ${data.name} is logged in`);
+
+  const winners = getWinners();
+  const updateWinnersRes = {
+    type: ResMessage.UPDATE_WINNERS,
+    id: 0,
+    data: JSON.stringify(winners),
+  };
+
+  resLog(ResMessage.UPDATE_WINNERS);
+  sendResponse(updateWinnersRes, ws);
+
+  resLog(ResMessage.UPDATE_ROOM);
+  roomsUpdateNotifier();
 };
 
 export default regHandler;

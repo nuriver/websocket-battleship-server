@@ -114,7 +114,7 @@ export const finishGame = (
 
   if (gameAborted) {
     const whoCancelled = getPlayer(enemyId);
-    console.log(`Game was canceled by ${whoCancelled?.name}`);
+    console.log(`Game was cancelled by ${whoCancelled?.name}`);
     sendResponse(finishRes, winnerSocket);
   } else {
     sendResponseToChosen(finishRes, [winnerId, enemyId]);
