@@ -1,5 +1,7 @@
 import WebSocket from 'ws';
 import { setPlayerOffline } from './players';
+import { deleteRoom } from './rooms';
+import roomsUpdateNotifier from '../utils/roomsUpdateNotifier';
 
 const clients = new Map();
 
@@ -10,6 +12,8 @@ export const addClient = (clientId: number, ws: WebSocket) => {
 export const deleteClient = (clientId: number) => {
   clients.delete(clientId);
   setPlayerOffline(clientId);
+  deleteRoom(clientId);
+  roomsUpdateNotifier();
 };
 
 export const getClients = () => {

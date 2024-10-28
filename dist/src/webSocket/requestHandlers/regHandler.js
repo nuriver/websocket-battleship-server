@@ -57,7 +57,7 @@ const regHandler = (message, ws, clientId) => {
             name: data.name,
             index: clientId,
             password: data.password,
-            status: 'online'
+            status: 'online',
         };
         (0, players_1.addPlayer)(player);
         (0, resLog_1.default)(`User ${player.name} is logged in`);
